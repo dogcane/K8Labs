@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  uicomponent:
+    image: ${DOCKER_REGISTRY-}uicomponent
+    build:
+      context: .
+      dockerfile: UIComponent/Dockerfile
+
+  apicomponent:
+    image: ${DOCKER_REGISTRY-}apicomponent
+    build:
+      context: .
+      dockerfile: ApiComponent/Dockerfile
+

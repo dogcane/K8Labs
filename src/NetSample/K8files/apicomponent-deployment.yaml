@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apicomponent-deployment
+  labels:
+    app: apicomponent-ct
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apicomponent-ct
+  template:
+    metadata:
+      labels:
+        app: apicomponent-ct
+    spec:
+      containers:
+      - name: apicomponent
+        image: apicomponent:1.0
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 80        
+        resources:
+          limits:
+            cpu: "1000m"
+            memory: "500Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apicomponent-service
+spec:
+  selector:
+    app: apicomponent-ct
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+

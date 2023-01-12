@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: uicomponent-configmap
+data:
+  apiurl: apicomponent-service
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uicomponent-deployment
+  labels:
+    app: uicomponent-ct
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: uicomponent-ct
+  template:
+    metadata:
+      labels:
+        app: uicomponent-ct
+    spec:
+      containers:
+      - name: uicomponent-ct
+        image: uicomponent:1.0
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 80        
+        resources:
+          limits:
+            cpu: "1000m"
+            memory: "500Mi"
+        env:
+        - name: weatherasvc
+          valueFrom:
+            configMapKeyRef:
+                name: uicomponent-configmap
+                key: apiurl          
+        - name: Services__WeatherEndpoint
+          value: http://$(weatherasvc)
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Development"          
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: uicomponent-service
+spec:
+  selector:
+    app: uicomponent-ct
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+

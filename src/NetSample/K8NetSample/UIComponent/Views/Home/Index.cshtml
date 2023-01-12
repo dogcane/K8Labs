@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@model IEnumerable<WeatherForecast>
+
+<div class="text-center">
+    <h1 class="display-4">Weather Page</h1>
+    <p>service uri : @ViewBag.wsvc_uri</p>
+
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6">
+            @foreach (var item in Model)
+            {
+                <div class="card w-100 rounded-3 weather-card">
+                    <h5 class="card-title">@item.Summary</h5>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-8">
+                                <h1 class="ml-auto mr-4 large-font">@item.TemperatureC&#176;</h1>
+                                <p class="time-font mb-0 ml-4 mt-auto">@item.Date.ToString("hh:MM") <span class="sm-font">AM</span></p>
+                                <p class="ml-4 mb-4">@item.Date.ToString("dddd, dd MMMM yyyy")</p>
+                            </div>
+                            <div class="col-4">
+                                <img src="@Url.Content($"~/img/weather-icons-png/{item.Summary}.png")" class="img-fluid weather-img" alt="@item.Summary">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col-3"></div>
+    </div>
+</div>
+
+
